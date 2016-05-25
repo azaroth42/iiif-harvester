@@ -3,6 +3,7 @@ import json, StringIO, requests
 import time
 import robotparser
 import re
+import sys
 
 host = "http://dlss-dev-azaroth.stanford.edu/"
 
@@ -16,14 +17,14 @@ img = Image.new("RGB", (w,h), "white")
 ## Respect tile dimensions of server
 tilesize = 1024
 if js.has_key('tiles'):
-	tilesize = js['tiles']['width']
+	tilesize = js['tiles'][0]['width']
 
 ## Introduce baseline crawl delay
 delay = 1
 
 ## Parse robots.txt
 resp = requests.get(host + "/robots.txt")
-if resp.status == 200:
+if resp.status_code == 200:
 	parser = robotparser.RobotFileParser()
 	parser.parse(resp.text)
 	okay = parser.can_fetch("*", service)
